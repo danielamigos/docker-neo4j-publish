@@ -1,4 +1,5 @@
 FROM openjdk:8-jre-alpine
+RUN groupadd -r neo4juser && useradd -r -g neo4juser neo4juser
 
 RUN apk add --no-cache --quiet \
     bash \
@@ -31,4 +32,6 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 EXPOSE 7474 7473 7687
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
+RUN chown -R neo4juser:neo4juser /var/lib/neo4j
+USER neo4juser
 CMD ["neo4j"]
